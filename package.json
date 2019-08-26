@@ -1,0 +1,23 @@
+{
+  "name": "cyclon-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --open"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cyclon.p2p": "^0.1.10",
+    "cyclon.p2p-common": "0.0.6",
+    "cyclon.p2p-rtc-client": "^0.1.21",
+    "cyclon.p2p-rtc-comms": "^0.1.23",
+    "webrtc-adapter": "^7.3.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
+  }
+}
