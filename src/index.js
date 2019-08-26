@@ -5,6 +5,7 @@ import { RTC, SocketIOSignallingService, RedundantSignallingSocket,
     HttpRequestService, TimingService, ChannelFactory, PeerConnectionFactory,
     AdapterJsRTCObjectFactory } from "cyclon.p2p-rtc-client"
 import { WebRTCComms, ShuffleStateFactory, SignallingServerBootstrap } from "cyclon.p2p-rtc-comms";
+import { StatsReporter } from "./StatsReporter";
 
 const SIGNALLING_SERVER_DELAY_BETWEEN_RETRIES=5000
 const CHANNEL_STATE_TIMEOUT=3000
@@ -64,30 +65,13 @@ logger.info("Started cyclon node, local ID is " + cyclonNode.getId());
 /**
  * Log stats when shuffles are completed
  */
-let successfulShuffles=0, errorShuffles=0, timeoutShuffles=0, totalShuffles=0;
-function logStats() {
-    let totalShuffles = successfulShuffles + errorShuffles + timeoutShuffles;
-    let successPct = ((successfulShuffles / totalShuffles) * 100).toFixed(0);
-    let errorPct = ((errorShuffles / totalShuffles) * 100).toFixed(0);
-    let timeoutPct = ((timeoutShuffles / totalShuffles) * 100).toFixed(0);
-    logger.info(
-        `${totalShuffles} shuffles completed:
-------------------------
-${successfulShuffles} successful shuffles (${successPct}%)
-${errorShuffles} errored shuffles (${errorPct}%)
-${timeoutShuffles} timed out shuffles shuffles (${timeoutPct}%)`);
-}
-
+let statsReporter = new StatsReporter(logger);
 cyclonNode.on("shuffleCompleted", () => {
-    successfulShuffles++;
-    logStats();
+    statsReporter.recordSuccesss();
 });
 cyclonNode.on("shuffleError", () => {
-    errorShuffles++;
-    logStats();
+    statsReporter.recordError();
 });
 cyclonNode.on("shuffleTimeout", () => {
-    timeoutShuffles++;
-    logStats();
+    statsReporter.recordTimeout();
 });
-
