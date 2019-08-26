@@ -11,25 +11,33 @@ const CHANNEL_STATE_TIMEOUT=3000
 const ICE_SERVERS=[]
 const SIGNALLING_SERVERS = [{
     "socket": {
-        "server": "http://cyclon-js-ss-one.herokuapp.com"
+        "server": "http://cyclon-js-ss-one.herokuapp.com:80"
     },
-    "signallingApiBase": "http://cyclon-js-ss-one.herokuapp.com"
+    "signallingApiBase": "http://cyclon-js-ss-one.herokuapp.com:80"
 },
 {
     "socket": {
-        "server": "http://cyclon-js-ss-two.herokuapp.com"
+        "server": "http://cyclon-js-ss-two.herokuapp.com:80"
     },
-    "signallingApiBase": "http://cyclon-js-ss-two.herokuapp.com"
+    "signallingApiBase": "http://cyclon-js-ss-two.herokuapp.com:80"
 },
 {
     "socket": {
-        "server": "http://cyclon-js-ss-three.herokuapp.com"
+        "server": "http://cyclon-js-ss-three.herokuapp.com:80"
     },
-    "signallingApiBase": "http://cyclon-js-ss-three.herokuapp.com"
+    "signallingApiBase": "http://cyclon-js-ss-three.herokuapp.com:80"
 }]
 
-CyclonCommon.consoleLogger().setLevelToDebug();
+const logger = CyclonCommon.consoleLogger();
 
+/**
+ * Set log level
+ */
+logger.setLevelToInfo();
+
+/**
+ * Create and start the cyclon node
+ */
 const signallingServerService = new StaticSignallingServerService(SIGNALLING_SERVERS);
 const socketFactory = new SocketFactory();
 const httpRequestService = new HttpRequestService();
@@ -47,4 +55,35 @@ const cyclonNode = builder(comms, new SignallingServerBootstrap(signallingSocket
     .build();
 
 cyclonNode.start();
-CyclonCommon.consoleLogger().debug("Started cyclon node, local ID is " + cyclonNode.getId());
+logger.info("Started cyclon node, local ID is " + cyclonNode.getId());
+
+/**
+ * Log stats when shuffles are completed
+ */
+let successfulShuffles=0, errorShuffles=0, timeoutShuffles=0, totalShuffles=0;
+function logStats() {
+    let totalShuffles = successfulShuffles + errorShuffles + timeoutShuffles;
+    let successPct = ((successfulShuffles / totalShuffles) * 100).toFixed(0);
+    let errorPct = ((errorShuffles / totalShuffles) * 100).toFixed(0);
+    let timeoutPct = ((timeoutShuffles / totalShuffles) * 100).toFixed(0);
+    logger.info(
+        `${totalShuffles} shuffles completed:
+------------------------
+${successfulShuffles} successful shuffles (${successPct}%)
+${errorShuffles} errored shuffles (${errorPct}%)
+${timeoutShuffles} timed out shuffles shuffles (${timeoutPct}%)`);
+}
+
+cyclonNode.on("shuffleCompleted", () => {
+    successfulShuffles++;
+    logStats();
+});
+cyclonNode.on("shuffleError", () => {
+    errorShuffles++;
+    logStats();
+});
+cyclonNode.on("shuffleTimeout", () => {
+    timeoutShuffles++;
+    logStats();
+});
+
