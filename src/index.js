@@ -33,7 +33,12 @@ const logger = CyclonCommon.consoleLogger();
 /**
  * Set log level
  */
-logger.setLevelToInfo();
+logger.setLevelToInfo(); // logger.setLevelToDebug() for more info
+
+/**
+ * Store state in sessionState so you can have different nodes in different tabs
+ */
+const storage = sessionStorage;
 
 /**
  * Create and start the cyclon node
@@ -41,17 +46,16 @@ logger.setLevelToInfo();
 const signallingServerService = new StaticSignallingServerService(SIGNALLING_SERVERS);
 const socketFactory = new SocketFactory();
 const httpRequestService = new HttpRequestService();
-const signallingServerSelector = new SignallingServerSelector(signallingServerService, localStorage, new TimingService(), SIGNALLING_SERVER_DELAY_BETWEEN_RETRIES);
+const signallingServerSelector = new SignallingServerSelector(signallingServerService, storage, new TimingService(), SIGNALLING_SERVER_DELAY_BETWEEN_RETRIES);
 const signallingSocket = new RedundantSignallingSocket(signallingServerService, socketFactory, CyclonCommon.consoleLogger(), CyclonCommon.asyncExecService(), signallingServerSelector);
-const signallingService = new SocketIOSignallingService(signallingSocket, CyclonCommon.consoleLogger(), new HttpRequestService(), localStorage);
+const signallingService = new SocketIOSignallingService(signallingSocket, CyclonCommon.consoleLogger(), new HttpRequestService(), storage);
 const peerConnectionFactory = new PeerConnectionFactory(new AdapterJsRTCObjectFactory(CyclonCommon.consoleLogger()), CyclonCommon.consoleLogger(), ICE_SERVERS, CHANNEL_STATE_TIMEOUT);
 const channelFactory = new ChannelFactory(peerConnectionFactory, signallingService, CyclonCommon.consoleLogger());
 const rtc = new RTC(signallingService, channelFactory);
 const comms = new WebRTCComms(rtc, new ShuffleStateFactory(CyclonCommon.consoleLogger(), CyclonCommon.asyncExecService()), CyclonCommon.consoleLogger());
 
 const cyclonNode = builder(comms, new SignallingServerBootstrap(signallingSocket, httpRequestService))
-    .withStorage(localStorage)
-    .withBootstrapSize(3)
+    .withStorage(storage)
     .build();
 
 cyclonNode.start();
