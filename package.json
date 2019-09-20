@@ -10,9 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "cyclon.p2p": "^0.1.10",
-    "cyclon.p2p-common": "0.0.6",
-    "cyclon.p2p-rtc-client": "^0.1.x",
-    "cyclon.p2p-rtc-comms": "^0.1.x"
+    "cyclon.p2p-common": "^0.1.0",
+    "cyclon.p2p-rtc-client": "^0.1.27",
+    "cyclon.p2p-rtc-comms": "^0.1.28",
+    "cyclon.p2p-rtc-server": "^0.1.11"
   },
   "devDependencies": {
     "html-webpack-plugin": "^3.2.0",
