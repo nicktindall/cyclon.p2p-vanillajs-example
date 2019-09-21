@@ -12,7 +12,7 @@
     "cyclon.p2p": "^0.1.12",
     "cyclon.p2p-common": "^0.1.1",
     "cyclon.p2p-rtc-client": "^0.1.30",
-    "cyclon.p2p-rtc-comms": "^0.1.29",
+    "cyclon.p2p-rtc-comms": "^0.1.30",
     "cyclon.p2p-rtc-server": "^0.1.11"
   },
   "devDependencies": {
