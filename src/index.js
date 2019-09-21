@@ -51,7 +51,7 @@ const signallingServerSelector = new SignallingServerSelector(signallingServerSe
 const signallingSocket = new RedundantSignallingSocket(signallingServerService, socketFactory, CyclonCommon.consoleLogger(), CyclonCommon.asyncExecService(), signallingServerSelector);
 const signallingService = new SocketIOSignallingService(signallingSocket, CyclonCommon.consoleLogger(), new HttpRequestService(), storage);
 const peerConnectionFactory = new PeerConnectionFactory(new AdapterJsRTCObjectFactory(CyclonCommon.consoleLogger()), CyclonCommon.consoleLogger(), ICE_SERVERS, CHANNEL_STATE_TIMEOUT);
-const channelFactory = new ChannelFactory(peerConnectionFactory, signallingService, CyclonCommon.consoleLogger());
+const channelFactory = new ChannelFactory(peerConnectionFactory, signallingService, CyclonCommon.consoleLogger(), CHANNEL_STATE_TIMEOUT);
 const rtc = new RTC(signallingService, channelFactory);
 const comms = new WebRTCComms(rtc, new ShuffleStateFactory(CyclonCommon.consoleLogger(), CyclonCommon.asyncExecService()), CyclonCommon.consoleLogger());
 
