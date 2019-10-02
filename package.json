@@ -9,16 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cyclon.p2p": "^0.1.12",
-    "cyclon.p2p-common": "^0.1.1",
-    "cyclon.p2p-rtc-client": "^0.1.30",
+    "cyclon.p2p": "^0.1.16",
+    "cyclon.p2p-common": "^0.1.8",
+    "cyclon.p2p-rtc-client": "^0.1.31",
     "cyclon.p2p-rtc-comms": "^0.1.30",
     "cyclon.p2p-rtc-server": "^0.1.11"
   },
   "devDependencies": {
     "html-webpack-plugin": "^3.2.0",
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0"
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
   }
 }

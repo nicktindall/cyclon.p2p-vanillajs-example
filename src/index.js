@@ -75,3 +75,20 @@ cyclonNode.on("shuffleError", () => {
 cyclonNode.on("shuffleTimeout", () => {
     statsReporter.recordTimeout();
 });
+
+/**
+ * Log changes to the neighbour set
+ */
+let neighbourSet = cyclonNode.getNeighbourSet();
+neighbourSet.on("change", (type, value) => {
+    switch (type) {
+        case 'update':
+            logger.info(`the pointer for node ${value.id} was updated`);
+            break;
+        case 'insert':
+            logger.info(`${value.id} was inserted into the neighbour set`);
+            break;
+        case 'remove':
+            logger.info(`${value.id} was removed from the neighbour set`)
+    }
+});
