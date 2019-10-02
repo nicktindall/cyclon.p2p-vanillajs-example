@@ -91,4 +91,5 @@ neighbourSet.on("change", (type, value) => {
         case 'remove':
             logger.info(`${value.id} was removed from the neighbour set`)
     }
+    logger.info(`IDs in neighbourset are ${JSON.stringify(Array.from(neighbourSet.getContents().keys()))}`)
 });
