@@ -10,7 +10,10 @@ import { StatsReporter } from "./StatsReporter";
 
 const SIGNALLING_SERVER_DELAY_BETWEEN_RETRIES=5000;
 const CHANNEL_STATE_TIMEOUT=3000;
-const ICE_SERVERS=[];
+const ICE_SERVERS=[
+    // The public Google STUN server
+    {urls: ['stun:stun.l.google.com:19302']},
+];
 const SIGNALLING_SERVERS = [{
     "socket": {
         "server": "http://cyclon-js-ss-one.herokuapp.com:80"
@@ -28,7 +31,7 @@ const SIGNALLING_SERVERS = [{
         "server": "http://cyclon-js-ss-three.herokuapp.com:80"
     },
     "signallingApiBase": "http://cyclon-js-ss-three.herokuapp.com:80"
-}]
+}];
 
 const logger = CyclonCommon.consoleLogger();
 
