@@ -9,9 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cyclon.p2p": "^0.1.17",
+    "cyclon.p2p": "^0.1.18",
     "cyclon.p2p-common": "^0.1.8",
-    "cyclon.p2p-rtc-client": "^0.1.33",
+    "cyclon.p2p-rtc-client": "^0.1.35",
     "cyclon.p2p-rtc-comms": "^0.1.30",
     "cyclon.p2p-rtc-server": "^0.1.11"
   },
