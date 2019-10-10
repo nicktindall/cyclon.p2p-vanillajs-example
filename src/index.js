@@ -1,39 +1,9 @@
-const CyclonCommon  = require("cyclon.p2p-common");
-import { builder } from "cyclon.p2p";
-import {
-    RTC, SocketIOSignallingService, RedundantSignallingSocket,
-    StaticSignallingServerService, SocketFactory, SignallingServerSelector,
-    HttpRequestService, TimingService, ChannelFactory, PeerConnectionFactory, NativeRTCObjectFactory
-} from "cyclon.p2p-rtc-client"
-import { WebRTCComms, ShuffleStateFactory, SignallingServerBootstrap } from "cyclon.p2p-rtc-comms";
-import { StatsReporter } from "./StatsReporter";
+import {commsAndBootstrapBuilder} from "cyclon.p2p-rtc-comms";
+import {builder} from "cyclon.p2p";
+import {StatsReporter} from "./StatsReporter";
+import {consoleLogger} from "cyclon.p2p-common";
 
-const SIGNALLING_SERVER_DELAY_BETWEEN_RETRIES=5000;
-const CHANNEL_STATE_TIMEOUT=3000;
-const ICE_SERVERS=[
-    // The public Google STUN server
-    {urls: ['stun:stun.l.google.com:19302']},
-];
-const SIGNALLING_SERVERS = [{
-    "socket": {
-        "server": "http://cyclon-js-ss-one.herokuapp.com:80"
-    },
-    "signallingApiBase": "http://cyclon-js-ss-one.herokuapp.com:80"
-},
-{
-    "socket": {
-        "server": "http://cyclon-js-ss-two.herokuapp.com:80"
-    },
-    "signallingApiBase": "http://cyclon-js-ss-two.herokuapp.com:80"
-},
-{
-    "socket": {
-        "server": "http://cyclon-js-ss-three.herokuapp.com:80"
-    },
-    "signallingApiBase": "http://cyclon-js-ss-three.herokuapp.com:80"
-}];
-
-const logger = CyclonCommon.consoleLogger();
+const logger = consoleLogger();
 
 /**
  * Set log level
@@ -48,19 +18,14 @@ const storage = sessionStorage;
 /**
  * Create and start the cyclon node
  */
-const signallingServerService = new StaticSignallingServerService(SIGNALLING_SERVERS);
-const socketFactory = new SocketFactory();
-const httpRequestService = new HttpRequestService();
-const signallingServerSelector = new SignallingServerSelector(signallingServerService, storage, new TimingService(), SIGNALLING_SERVER_DELAY_BETWEEN_RETRIES);
-const signallingSocket = new RedundantSignallingSocket(signallingServerService, socketFactory, CyclonCommon.consoleLogger(), CyclonCommon.asyncExecService(), signallingServerSelector);
-const signallingService = new SocketIOSignallingService(signallingSocket, CyclonCommon.consoleLogger(), new HttpRequestService(), storage);
-const peerConnectionFactory = new PeerConnectionFactory(new NativeRTCObjectFactory(CyclonCommon.consoleLogger()), CyclonCommon.consoleLogger(), ICE_SERVERS, CHANNEL_STATE_TIMEOUT);
-const channelFactory = new ChannelFactory(peerConnectionFactory, signallingService, CyclonCommon.consoleLogger(), CHANNEL_STATE_TIMEOUT);
-const rtc = new RTC(signallingService, channelFactory);
-const comms = new WebRTCComms(rtc, new ShuffleStateFactory(CyclonCommon.consoleLogger(), CyclonCommon.asyncExecService()), CyclonCommon.consoleLogger());
-
-const cyclonNode = builder(comms, new SignallingServerBootstrap(signallingSocket, httpRequestService))
+const {comms, bootstrap} = commsAndBootstrapBuilder()
     .withStorage(storage)
+    .withLogger(logger)
+    .build();
+
+const cyclonNode = builder(comms, bootstrap)
+    .withStorage(storage)
+    .withLogger(logger)
     .build();
 
 cyclonNode.start();
