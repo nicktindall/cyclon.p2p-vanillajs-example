@@ -10,14 +10,14 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
-    "cyclon.p2p": "^0.1.18",
-    "cyclon.p2p-common": "^0.1.8",
-    "cyclon.p2p-rtc-comms": "^0.1.32"
+    "cyclon.p2p": "^1.0.0",
+    "cyclon.p2p-common": "^0.1.11",
+    "cyclon.p2p-rtc-comms": "^1.0.0"
   },
   "devDependencies": {
     "html-webpack-plugin": "^3.2.0",
-    "webpack": "^4.41.0",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.9.0"
   }
 }
