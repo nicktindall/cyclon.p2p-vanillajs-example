@@ -21,6 +21,7 @@ const storage = sessionStorage;
 const {comms, bootstrap} = commsAndBootstrapBuilder()
     .withStorage(storage)
     .withLogger(logger)
+    .joiningRooms(['CyclonP2P_vanillaJS_example'])
     .build();
 
 const cyclonNode = builder(comms, bootstrap)
